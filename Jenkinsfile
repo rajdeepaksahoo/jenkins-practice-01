@@ -23,6 +23,13 @@ pipeline {
                 sh "./mvnw test"
             }
         }
+
+        stage("Docker-Build"){
+            steps{
+                echo "Building Docker Image"
+                sh "docker build -t jenkins-practice-01:latest ."
+            }
+        }
     }
 
     post {
