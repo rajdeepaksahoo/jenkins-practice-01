@@ -60,7 +60,11 @@ pipeline {
         stage("Docker-Run") {
             steps {
                 echo "Running Docker Image"
-                sh "docker run -d --name jenkins-practice -p 8081:8081 razdeepak/jenkins-practice-01:latest"
+                sh '''
+                    docker stop jenkins-practice 2>/dev/null || true
+                    docker rm jenkins-practice 2>/dev/null || true
+                    docker run -d --name jenkins-practice -p 8081:8081 razdeepak/jenkins-practice-01:latest
+                    '''
             }
         }
     }
