@@ -38,7 +38,7 @@ pipeline {
                 echo 'Building Docker Image...'
                 sh '''
                     docker build \
-                        -t razdeepak/jenkins-practice-01:latest \
+                        -t razdeepak/jenkins-practice-01:${BUILD_NUMBER} \
                         .
                 '''
             }
@@ -49,7 +49,7 @@ pipeline {
                 echo 'Pushing Docker Image...'
                 sh '''
                     docker push \
-                        razdeepak/jenkins-practice-01:latest
+                        razdeepak/jenkins-practice-01:${BUILD_NUMBER}
                 '''
             }
         }
@@ -65,7 +65,7 @@ pipeline {
                     docker run -d \
                         --name jenkins-practice \
                         -p 8081:8081 \
-                        razdeepak/jenkins-practice-01:latest
+                        razdeepak/jenkins-practice-01:${BUILD_NUMBER}
                 '''
             }
         }
