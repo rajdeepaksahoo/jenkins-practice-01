@@ -1,27 +1,36 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage("Git-Pull"){
-            echo "Pulling From Git..."
-            checkout scm
+
+    stages {
+
+        stage("Git-Pull") {
+            steps {
+                echo "Pulling From Git..."
+                checkout scm
+            }
         }
 
-        stage("Building"){
-            echo "Building Spring Boot Project..."
-            sh "./mvnw clean package -DskipTests"
+        stage("Building") {
+            steps {
+                echo "Building Spring Boot Project..."
+                sh "./mvnw clean package -DskipTests"
+            }
         }
 
-        stage("Testing"){
-            echo "Testing..."
-            sh "./mvnw test"
+        stage("Testing") {
+            steps {
+                echo "Testing..."
+                sh "./mvnw test"
+            }
         }
     }
 
-    post{
-        success{
+    post {
+        success {
             echo "Build Is Success."
         }
-        failure{
+
+        failure {
             echo "Build Failure"
         }
     }
