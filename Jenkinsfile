@@ -39,14 +39,14 @@ pipeline {
         stage("Docker-Build"){
             steps{
                 echo "Building Docker Image"
-                sh "docker build -t rajdeepak/jenkins-practice-01:latest ."
+                sh "docker build -t razdeepak/jenkins-practice-01:latest ."
             }
         }
 
         stage("Push-Docker-Image"){
             steps{
                 echo "Pushing Docker Image"
-                sh "docker push  rajdeepak/jenkins-practice-01:latest"
+                sh "docker push  razdeepak/jenkins-practice-01:latest"
             }
         }
 
