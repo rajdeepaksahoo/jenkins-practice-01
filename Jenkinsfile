@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     stages {
-        stage('Test') {
+
+        stage('Environment') {
             steps {
                 sh 'whoami'
                 sh 'id'
@@ -10,72 +11,79 @@ pipeline {
                 sh 'docker --version'
             }
         }
-        stage("Git-Pull") {
+
+        stage('Git-Pull') {
             steps {
-                echo "Pulling From Git..."
+                echo 'Pulling From Git...'
                 checkout scm
             }
         }
 
-        stage("Building") {
+        stage('Build') {
             steps {
-                echo "Building Spring Boot Project..."
-                sh "./mvnw clean package -DskipTests"
+                echo 'Building Spring Boot Project...'
+                sh './mvnw clean package -DskipTests'
             }
         }
 
-        stage("Testing") {
+        stage('Test') {
             steps {
-                echo "Testing..."
-                sh "./mvnw test"
-            }
-        }
-        stage("Docker-Images-before") {
-            steps {
-                echo "Checking Docker Image"
-                sh "docker images"
-            }
-        }
-        stage("Docker-Build"){
-            steps{
-                echo "Building Docker Image"
-                sh "docker build -t razdeepak/jenkins-practice-01:latest ."
+                echo 'Testing...'
+                sh './mvnw test'
             }
         }
 
-        stage("Push-Docker-Image"){
-            steps{
-                echo "Pushing Docker Image"
-                sh "docker push  razdeepak/jenkins-practice-01:latest"
+        stage('Docker-Build') {
+            steps {
+                echo 'Building Docker Image...'
+                sh '''
+                    docker build \
+                        -t razdeepak/jenkins-practice-01:latest \
+                        .
+                '''
             }
         }
 
-        stage("Docker-Images-after") {
+        stage('Docker-Push') {
             steps {
-                echo "Checking Docker Image"
-                sh "docker images"
+                echo 'Pushing Docker Image...'
+                sh '''
+                    docker push \
+                        razdeepak/jenkins-practice-01:latest
+                '''
             }
         }
 
-        stage("Docker-Run") {
+        stage('Docker-Run') {
             steps {
-                echo "Running Docker Image"
+                echo 'Running Docker Image...'
+
                 sh '''
                     docker stop jenkins-practice 2>/dev/null || true
                     docker rm jenkins-practice 2>/dev/null || true
-                    docker run -d --name jenkins-practice -p 8081:8081 razdeepak/jenkins-practice-01:latest
-                    '''
+
+                    docker run -d \
+                        --name jenkins-practice \
+                        -p 8081:8081 \
+                        razdeepak/jenkins-practice-01:latest
+                '''
+            }
+        }
+
+        stage('Docker-Images') {
+            steps {
+                sh 'docker images'
             }
         }
     }
 
     post {
         success {
-            echo "Build Is Success."
+            echo 'Build Is Success.'
         }
 
         failure {
-            echo "Build Failure"
+            echo 'Build Failure'
         }
     }
 }
