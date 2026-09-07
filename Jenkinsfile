@@ -2,7 +2,14 @@ pipeline {
     agent any
 
     stages {
-
+        stage('Test') {
+            steps {
+                sh 'whoami'
+                sh 'id'
+                sh 'git --version'
+                sh 'docker --version'
+            }
+        }
         stage("Git-Pull") {
             steps {
                 echo "Pulling From Git..."
