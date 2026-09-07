@@ -56,6 +56,13 @@ pipeline {
                 sh "docker images"
             }
         }
+
+        stage("Docker-Run") {
+            steps {
+                echo "Running Docker Image"
+                sh "docker run -d --name jenkins-practice -p 8081:8081 razdeepak/jenkins-practice-01:latest"
+            }
+        }
     }
 
     post {
