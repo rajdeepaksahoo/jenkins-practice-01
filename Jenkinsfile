@@ -1,17 +1,17 @@
 pipeline{
     agent any
-    steps{
-        step("Git-Pull"){
+    stages{
+        stage("Git-Pull"){
             echo "Pulling From Git..."
             checkout scm
         }
 
-        step("Building"){
+        stage("Building"){
             echo "Building Spring Boot Project..."
             sh "./mvnw clean package -DskipTests"
         }
 
-        step("Testing"){
+        stage("Testing"){
             echo "Testing..."
             sh "./mvnw test"
         }
