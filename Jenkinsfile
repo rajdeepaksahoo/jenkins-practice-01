@@ -23,6 +23,13 @@ pipeline {
                 sh "./mvnw test"
             }
         }
+
+        stage("Run") {
+            steps {
+                echo "Starting Spring Boot Application..."
+                sh "java -jar target/*.jar"
+            }
+        }
     }
 
     post {
